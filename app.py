@@ -106,6 +106,18 @@ def render_pdf_from_payload(payload: dict) -> bytes:
     return HTML(string=html_str, base_url=base).write_pdf()
 
 # ------------------ ENDPOINTS ------------------
+import weasyprint, pydyf, logging
+app.logger.setLevel(logging.INFO)
+
+@app.get("/versions")
+def versions():
+    return {
+        "weasyprint": getattr(weasyprint, "__version__", "unknown"),
+        "pydyf": getattr(pydyf, "__version__", "unknown"),
+    }
+
+
+
 @app.get("/health")
 def health():
     return {"ok": True}
