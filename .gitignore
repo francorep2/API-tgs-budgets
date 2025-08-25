@@ -1,0 +1,76 @@
+
+# -------- Python / Flask --------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+.cache/
+*.log
+
+# Bases de datos locales / instancias
+instance/
+*.sqlite3
+*.db
+
+# Tests / coverage / análisis estático
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.dmypy.json
+ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# -------- Entornos virtuales --------
+.venv/
+venv/
+ENV/
+env/
+.conda/
+pip-wheel-metadata/
+
+# Variables de entorno / secretos
+.env
+.env.*
+*.secret
+*.secret.*
+*.local
+*.local.*
+
+# -------- SO / Editores --------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# IDEs
+.vscode/
+.idea/
+*.code-workspace
+.settings/
+*.swp
+*.swo
+
+# -------- Herramientas varias --------
+# ngrok (config local)
+.ngrok2/
+ngrok.yml
+
+# Carpeta para
