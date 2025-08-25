@@ -1,10 +1,16 @@
-FROM python:3.11-slim
+# Usa Debian estable para evitar cambios de paquetes
+FROM python:3.11-slim-bookworm
 
-# Dependencias nativas que WeasyPrint necesita (cairo, pango, gdk-pixbuf, fuentes, mime)
+# Dependencias nativas que WeasyPrint necesita
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libcairo2 libpango-1.0-0 libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 libffi-dev shared-mime-info \
-    fonts-dejavu-core libharfbuzz0b \
+    libcairo2 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libpangoft2-1.0-0 \
+    libgdk-pixbuf-2.0-0 \
+    libharfbuzz0b \
+    shared-mime-info \
+    fonts-dejavu-core \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -12,9 +18,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiá tu proyecto (app.py, templates/, static/, etc.)
 COPY . .
 
-# Gunicorn escucha en $PORT (si no existe, usa 8000)
 ENV PYTHONUNBUFFERED=1
 CMD sh -c 'gunicorn -w 2 -b 0.0.0.0:${PORT:-8000} app:app'
