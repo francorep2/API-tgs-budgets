@@ -132,15 +132,6 @@ def render_pdf_from_payload(payload: dict) -> bytes:
 import weasyprint, pydyf, logging
 app.logger.setLevel(logging.INFO)
 
-@app.get("/versions")
-def versions():
-    return {
-        "weasyprint": getattr(weasyprint, "__version__", "unknown"),
-        "pydyf": getattr(pydyf, "__version__", "unknown"),
-    }
-
-
-
 @app.get("/health")
 def health():
     return {"ok": True}
