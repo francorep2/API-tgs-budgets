@@ -4,6 +4,29 @@ from flask import Flask, request, send_file, jsonify
 from weasyprint import HTML
 from datetime import date, timedelta
 
+# --- parches de compatibilidad pydyf / diagnóstico ---
+import inspect, sys, os
+
+# Intenta importar pydyf y, si la firma de PDF.__init__ es "vieja",
+# crea un wrapper que acepte (version, identifier) como espera WeasyPrint.
+try:
+    import pydyf as _pydyf
+    _sig = inspect.signature(_pydyf.PDF.__init__)
+    # firmas típicas:
+    #   nueva: (self, version='1.7', identifier=None)
+    #   vieja: (self)
+    if len(_sig.parameters) == 1:
+        _old = _pydyf.PDF
+        def _compat_PDF(version='1.7', identifier=None):
+            # la versión vieja no usa args, simplemente construimos
+            return _old()
+        _pydyf.PDF = _compat_PDF  # monkeypatch
+        sys.modules['pydyf'] = _pydyf  # asegura que todos vean el parche
+except Exception:
+    pass
+# --- fin parches ---
+
+
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 
@@ -122,6 +145,20 @@ def versions():
 def health():
     return {"ok": True}
 
+import pydyf, weasyprint
+
+@app.get("/versions")
+def versions():
+    return {
+        "weasyprint": getattr(weasyprint, "__version__", "unknown"),
+        "pydyf": getattr(pydyf, "__version__", "unknown"),
+        "pydyf_file": getattr(pydyf, "__file__", "unknown"),
+        "pydyf_pdf_init": str(inspect.signature(
+            pydyf.PDF if not hasattr(pydyf.PDF, "__init__") else pydyf.PDF.__init__
+        )),
+    }
+
+
 @app.get("/presupuesto")
 def info():
     return ("Use POST /presupuesto con JSON. Pruebe /demo para ver un PDF.", 200, {"content-type":"text/plain; charset=utf-8"})
@@ -163,3 +200,4 @@ def presupuesto():
     except Exception as e:
         app.logger.exception("Error en /presupuesto")
         return (f"SERVER ERROR: {e}", 500, {"Content-Type":"text/plain; charset=utf-8"})
+
