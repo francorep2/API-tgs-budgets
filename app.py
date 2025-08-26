@@ -1,7 +1,6 @@
 # app.py
 import io
 import os
-import sys
 import random
 import logging
 import inspect
@@ -10,37 +9,6 @@ from datetime import date, timedelta
 from flask import Flask, request, send_file
 from weasyprint import HTML
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Parche de compatibilidad para pydyf
-# (por si alguna instalación trae una clase PDF con __init__(self) "viejo")
-# ──────────────────────────────────────────────────────────────────────────────
-try:
-    import pydyf as _pydyf
-    _PDF = _pydyf.PDF
-    _init = getattr(_PDF, "__init__", None)
-    _needs_compat = False
-    if _init is not None:
-        try:
-            sig = inspect.signature(_init)
-            # firma "vieja" suele tener sólo 'self'
-            _needs_compat = len(sig.parameters) <= 1
-        except Exception:
-            _needs_compat = False
-
-    if _needs_compat:
-        class PDFCompat(_PDF):
-            def __init__(self, version="1.7", identifier=None):
-                # la implementación antigua no acepta argumentos
-                super().__init__()
-        _pydyf.PDF = PDFCompat
-        sys.modules["pydyf"] = _pydyf
-except Exception:
-    # Si falla el parche, seguimos y dejamos que WeasyPrint lance el error real
-    pass
-
-# ──────────────────────────────────────────────────────────────────────────────
-# App Flask
-# ──────────────────────────────────────────────────────────────────────────────
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 
