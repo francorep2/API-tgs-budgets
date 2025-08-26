@@ -1,40 +1,58 @@
-# app.py (extracto)
-import io, os, random, logging
-from flask import Flask, request, send_file, jsonify
-from weasyprint import HTML
+# app.py
+import io
+import os
+import sys
+import random
+import logging
+import inspect
 from datetime import date, timedelta
 
-# --- parches de compatibilidad pydyf / diagnóstico ---
-import inspect, sys, os
+from flask import Flask, request, send_file
+from weasyprint import HTML
 
-# Intenta importar pydyf y, si la firma de PDF.__init__ es "vieja",
-# crea un wrapper que acepte (version, identifier) como espera WeasyPrint.
+# ──────────────────────────────────────────────────────────────────────────────
+# Parche de compatibilidad para pydyf
+# (por si alguna instalación trae una clase PDF con __init__(self) "viejo")
+# ──────────────────────────────────────────────────────────────────────────────
 try:
     import pydyf as _pydyf
-    _sig = inspect.signature(_pydyf.PDF.__init__)
-    # firmas típicas:
-    #   nueva: (self, version='1.7', identifier=None)
-    #   vieja: (self)
-    if len(_sig.parameters) == 1:
-        _old = _pydyf.PDF
-        def _compat_PDF(version='1.7', identifier=None):
-            # la versión vieja no usa args, simplemente construimos
-            return _old()
-        _pydyf.PDF = _compat_PDF  # monkeypatch
-        sys.modules['pydyf'] = _pydyf  # asegura que todos vean el parche
+    _PDF = _pydyf.PDF
+    _init = getattr(_PDF, "__init__", None)
+    _needs_compat = False
+    if _init is not None:
+        try:
+            sig = inspect.signature(_init)
+            # firma "vieja" suele tener sólo 'self'
+            _needs_compat = len(sig.parameters) <= 1
+        except Exception:
+            _needs_compat = False
+
+    if _needs_compat:
+        class PDFCompat(_PDF):
+            def __init__(self, version="1.7", identifier=None):
+                # la implementación antigua no acepta argumentos
+                super().__init__()
+        _pydyf.PDF = PDFCompat
+        sys.modules["pydyf"] = _pydyf
 except Exception:
+    # Si falla el parche, seguimos y dejamos que WeasyPrint lance el error real
     pass
-# --- fin parches ---
 
-
+# ──────────────────────────────────────────────────────────────────────────────
+# App Flask
+# ──────────────────────────────────────────────────────────────────────────────
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 
-# ------------------ UTILS ROBUSTOS ------------------
+# ──────────────────────────────────────────────────────────────────────────────
+# Utilidades
+# ──────────────────────────────────────────────────────────────────────────────
 def _to_float(val):
     """Convierte '1.234,56' / '1234.56' / 1234 -> float, o 0.0 si no se puede."""
-    if val is None: return 0.0
-    if isinstance(val, (int, float)): return float(val)
+    if val is None:
+        return 0.0
+    if isinstance(val, (int, float)):
+        return float(val)
     s = str(val).strip()
     # quita separadores de miles y adapta coma decimal
     s = s.replace(".", "").replace(",", ".")
@@ -43,21 +61,23 @@ def _to_float(val):
     except Exception:
         return 0.0
 
+
 def _total_pc(payload: dict) -> float:
     total = 0.0
     for it in (payload.get("items") or []):
         precio = (
-            it.get("precio_fin") or it.get("precioFinal") or
-            it.get("precio_unit") or it.get("precioUnit") or
-            it.get("precio") or 0
+            it.get("precio_fin") or it.get("precioFinal")
+            or it.get("precio_unit") or it.get("precioUnit")
+            or it.get("precio") or 0
         )
         cant = _to_float(it.get("cantidad") or 1)
-        dto  = _to_float(it.get("descuento") or 0)
-        total += _to_float(precio) * cant * (1 - dto/100.0)
+        dto = _to_float(it.get("descuento") or 0)
+        total += _to_float(precio) * cant * (1 - dto / 100.0)
     return total
 
-def _linea_resumen(payload: dict, total_pc: float) -> dict:
-    # Ítem resumen con el total
+
+def _linea_resumen(total_pc: float) -> dict:
+    """Ítem resumen con el total (se muestra sólo este con importe)."""
     return {
         "producto": "Presupuesto de PC Armada: The Gamer Shop",
         "observacion": (
@@ -65,12 +85,13 @@ def _linea_resumen(payload: dict, total_pc: float) -> dict:
             "Incluye la instalación del Sistema Operativo Windows 11/10 Pro/Home"
         ),
         "cantidad": 1,
-        "precio_unit": total_pc,   # se muestra en Importe
+        "precio_unit": total_pc,  # se usa para calcular el Importe
         "descuento": 0,
     }
 
+
 def _lineas_detalle_cero(payload: dict) -> list:
-    # resto de ítems “en cero” para que queden listados sin precio
+    """Resto de ítems como listado, con importe 0."""
     out = []
     for it in (payload.get("items") or []):
         out.append({
@@ -82,7 +103,10 @@ def _lineas_detalle_cero(payload: dict) -> list:
         })
     return out
 
-# ------------------ RENDER PDF ------------------
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Render PDF
+# ──────────────────────────────────────────────────────────────────────────────
 def render_pdf_from_payload(payload: dict) -> bytes:
     from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -90,6 +114,7 @@ def render_pdf_from_payload(payload: dict) -> bytes:
         loader=FileSystemLoader("templates"),
         autoescape=select_autoescape()
     )
+
     # filtro $ 1.234.567,89
     def money_ar(value):
         n = _to_float(value)
@@ -105,11 +130,12 @@ def render_pdf_from_payload(payload: dict) -> bytes:
     meta = dict(payload.get("meta") or {})
     if not str(meta.get("numero") or "").strip():
         meta["numero"] = f"{random.randint(0, 9999):04d}"
+
     payload = dict(payload)
     payload["meta"] = meta
 
     total_pc = _total_pc(payload)
-    lineas = [_linea_resumen(payload, total_pc), *_lineas_detalle_cero(payload)]
+    lineas = [_linea_resumen(total_pc), *_lineas_detalle_cero(payload)]
 
     html_str = env.get_template("presupuesto.html").render(
         payload=payload,
@@ -125,34 +151,44 @@ def render_pdf_from_payload(payload: dict) -> bytes:
         hoy=hoy, vto=vto,
         lineas=lineas, total_pc=total_pc
     )
-    base = os.path.join(app.root_path, "static")
+
+    base = os.path.join(app.root_path, "static")  # para resolver <img src="...">
     return HTML(string=html_str, base_url=base).write_pdf()
 
-# ------------------ ENDPOINTS ------------------
-import weasyprint, pydyf, logging
-app.logger.setLevel(logging.INFO)
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Endpoints
+# ──────────────────────────────────────────────────────────────────────────────
 @app.get("/health")
 def health():
     return {"ok": True}
 
-import pydyf, weasyprint
 
 @app.get("/versions")
 def versions():
+    import weasyprint, pydyf  # runtime, para ver realmente qué se importó
+    try:
+        target = pydyf.PDF if not hasattr(pydyf.PDF, "__init__") else pydyf.PDF.__init__
+        sig = str(inspect.signature(target))
+    except Exception:
+        sig = "unknown"
+
     return {
         "weasyprint": getattr(weasyprint, "__version__", "unknown"),
         "pydyf": getattr(pydyf, "__version__", "unknown"),
         "pydyf_file": getattr(pydyf, "__file__", "unknown"),
-        "pydyf_pdf_init": str(inspect.signature(
-            pydyf.PDF if not hasattr(pydyf.PDF, "__init__") else pydyf.PDF.__init__
-        )),
+        "pydyf_pdf_init": sig,
     }
 
 
 @app.get("/presupuesto")
 def info():
-    return ("Use POST /presupuesto con JSON. Pruebe /demo para ver un PDF.", 200, {"content-type":"text/plain; charset=utf-8"})
+    return (
+        "Use POST /presupuesto con JSON. Pruebe /demo para ver un PDF.",
+        200,
+        {"content-type": "text/plain; charset=utf-8"},
+    )
+
 
 @app.get("/demo")
 def demo():
@@ -160,21 +196,27 @@ def demo():
         "meta": {"titulo": "Presupuesto Demo"},
         "cliente": {"nombre": "Consumidor Final"},
         "items": [
-            {"producto":"Procesador","precio_unit":351000},
-            {"producto":"Motherboard","precio_unit":130000},
+            {"producto": "Procesador", "precio_unit": 351000},
+            {"producto": "Motherboard", "precio_unit": 130000},
         ],
     }
     pdf = render_pdf_from_payload(sample)
-    return send_file(io.BytesIO(pdf), mimetype="application/pdf", download_name="demo.pdf")
+    return send_file(
+        io.BytesIO(pdf),
+        mimetype="application/pdf",
+        download_name="demo.pdf"
+    )
+
 
 @app.post("/presupuesto")
 def presupuesto():
     try:
         data = request.get_json(force=True, silent=True) or {}
-        # Acepta también {"payload":{...}}
-        if "payload" in data and isinstance(data["payload"], dict):
+        # también acepta {"payload": {...}}
+        if isinstance(data.get("payload"), dict):
             data = data["payload"]
 
+        # saneo mínimo
         if not isinstance(data.get("items"), list):
             data["items"] = []
         if not isinstance(data.get("meta"), dict):
@@ -184,11 +226,20 @@ def presupuesto():
 
         pdf_bytes = render_pdf_from_payload(data)
         nombre = (data.get("meta", {}).get("titulo") or "Presupuesto") + ".pdf"
-        return send_file(io.BytesIO(pdf_bytes),
-                         mimetype="application/pdf",
-                         as_attachment=False,
-                         download_name=nombre)
+        return send_file(
+            io.BytesIO(pdf_bytes),
+            mimetype="application/pdf",
+            as_attachment=False,
+            download_name=nombre,
+        )
     except Exception as e:
         app.logger.exception("Error en /presupuesto")
-        return (f"SERVER ERROR: {e}", 500, {"Content-Type":"text/plain; charset=utf-8"})
+        return (f"SERVER ERROR: {e}", 500, {"Content-Type": "text/plain; charset=utf-8"})
 
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Run local (opcional)
+# ──────────────────────────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    print("Running on http://127.0.0.1:8000")
+    app.run(host="127.0.0.1", port=8000, debug=True)
