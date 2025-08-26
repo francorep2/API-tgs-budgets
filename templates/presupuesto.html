@@ -2,156 +2,148 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <title>Presupuesto</title>
   <style>
-    :root{
-      --primary:#c1161d;
-      --ink:#111;
-      --muted:#666;
-      --line:#e6e6e6;
-    }
+    /* Paleta y tipografía (sin CSS variables) */
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #111; }
+    .muted { color: #666; }
 
-    @page{
+    /* Márgenes de página */
+    @page {
       size: A4;
       margin: 16mm 14mm 18mm 14mm;
-      @bottom-center{
+      @bottom-center {
         content: "Página " counter(page);
-        color:#444;
+        color: #444;
         font-family: Arial, Helvetica, sans-serif;
-        font-size:10px;
+        font-size: 10px;
       }
     }
 
-    *{ box-sizing:border-box; }
-    body{ font-family: Arial, Helvetica, sans-serif; font-size:12px; color:var(--ink); }
+    /* Utilitarios */
+    * { box-sizing: border-box; }
+    .section { margin-top: 12px; }
+    .card { border: 1px solid #e6e6e6; border-radius: 8px; padding: 10px 12px; }
+    .kv { width: 100%; border-collapse: collapse; }
+    .kv td.k { width: 120px; color: #666; vertical-align: top; padding: 3px 6px 3px 0; }
+    .kv td.v { font-weight: 600; vertical-align: top; padding: 3px 0; }
 
-    /* === HEADER EN DOS FILAS === */
-    .header{
-      display:grid;
-      grid-template-rows: auto auto;
-      row-gap: 6px;
-      margin-bottom: 6px;
+    /* Header (tabla para compatibilidad) */
+    table.hdr { width: 100%; border-collapse: collapse; }
+    table.hdr td { vertical-align: top; }
+    .brand-cell { width: 60%; }
+    .brand-line { white-space: nowrap; }
+    .brand-logo { height: 64px; vertical-align: middle; }
+    .brand-name { font-size: 20px; font-weight: 700; vertical-align: middle; margin-left: 10px; display: inline-block; }
+    .brand-sub { color: #666; font-size: 12px; margin-top: 2px; }
+
+    .doc-cell { width: 40%; text-align: center; }
+    .doc-title { font-size: 28px; font-weight: 700; letter-spacing: .4px; margin-top: 18px; }
+    .doc-sub { color: #666; font-size: 12px; margin-top: 2px; }
+
+    /* Dos columnas (inline-block) para compatibilidad */
+    .cols { font-size: 0; }
+    .col { display: inline-block; vertical-align: top; width: 49.5%; font-size: 12px; }
+    .col + .col { margin-left: 1%; }
+
+    /* Tabla de items */
+    table.items { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 8px; }
+    table.items col.c-code { width: 70px; }
+    table.items col.c-desc { width: auto; }
+    table.items col.c-qty  { width: 90px; }
+    table.items col.c-amt  { width: 130px; }
+
+    table.items thead th {
+      background: #c1161d; color: #fff; text-align: left;
+      padding: 7px 8px; font-weight: 700; font-size: 12px; border: 1px solid #c1161d;
     }
-    .header-top{                       /* Fila 1: marca */
-      display:flex;
-      align-items:center;
-      gap:10px;
+    table.items tbody td {
+      border-bottom: 1px solid #e6e6e6; padding: 7px 8px; vertical-align: top;
     }
-    .brand{ display:flex; align-items:center; gap:10px; }
-    .brand img{ height:64px; }         /* logo grande */
-    .brand .name{ font-size:20px; font-weight:700; line-height:1; white-space:nowrap; }
-    .brand .sub{ color:var(--muted); font-size:12px; margin-top:2px; }
-
-    .header-title{                     /* Fila 2: título centrado */
-      display:flex;
-      justify-content:center;
-    }
-    .doctitle{
-      text-align:center;
-      margin-top: 32px;                /* << BAJA AÚN MÁS EL TÍTULO */
-    }
-    .doctitle h1{ margin:0; font-size:30px; letter-spacing:.4px; }
-    .doctitle small{ color:var(--muted); display:block; margin-top:2px; }
-
-    /* Cards */
-    .card{ border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
-    .grid{ display:grid; gap:10px; }
-    .g2{ grid-template-columns: 1fr 1fr; }
-
-    .kv{ display:grid; grid-template-columns: 120px 1fr; gap:6px 10px; }
-    .kv .k{ color:var(--muted); }
-    .kv .v{ font-weight:600; }
-
-    .section{ margin-top:10px; }
-
-    /* Tabla items — 4 columnas: Cód. | Artículo | Cantidad | Importe */
-    table.items{ width:100%; border-collapse:collapse; table-layout:fixed; margin-top:8px; }
-    table.items thead th{
-      background:var(--primary); color:#fff; text-align:left;
-      padding:7px 8px; font-weight:700; font-size:12px; border:1px solid var(--primary);
-    }
-    table.items thead th.num{ text-align:right; }
-    table.items tbody td{ border-bottom:1px solid var(--line); padding:7px 8px; vertical-align:top; }
-    table.items td.num{ text-align:right; white-space:nowrap; font-variant-numeric: tabular-nums; }
-
-    /* anchos por columna */
-    table.items col.c-code   { width:70px; }
-    table.items col.c-desc   { width:auto; }
-    table.items col.c-qty    { width:90px; }
-    table.items col.c-amount { width:140px; }
+    td.num { text-align: right; white-space: nowrap; }
 
     /* Totales */
-    .totals{ margin-top:10px; display:flex; justify-content:flex-end; }
-    .totals .row{ min-width:300px; border:1px solid var(--line); border-radius:10px; padding:8px 10px; }
-    .totals .label{ color:var(--muted); }
-    .totals .value{ font-weight:700; font-size:14px; text-align:right; }
+    .totals { margin-top: 10px; text-align: right; }
+    .totals-box {
+      display: inline-block; min-width: 300px; text-align: left;
+      border: 1px solid #e6e6e6; border-radius: 8px; padding: 8px 10px;
+    }
+    .totals-label { color: #666; }
+    .totals-value { font-weight: 700; font-size: 14px; text-align: right; }
 
     /* Observaciones */
-    .obs{ margin-top:10px; font-size:11px; color:#333; }
-
-    /* helpers */
-    .muted{ color:var(--muted); }
-    .mt-6{ margin-top:6px; }
+    .obs { margin-top: 10px; font-size: 11px; color: #333; }
   </style>
 </head>
 <body>
 
   <!-- Encabezado -->
-  <div class="header">
-    <div class="header-top">
-      <div class="brand">
-        <img src="logo.png" alt="Logo">
-        <div>
-          <div class="name">The Gamer Shop</div>
-          <div class="sub">Responsable Inscripto</div>
+  <table class="hdr">
+    <tr>
+      <td class="brand-cell">
+        <div class="brand-line">
+          <img src="logo.png" alt="Logo" class="brand-logo">
+          <span class="brand-name">{{ empresa.nombre }}</span>
         </div>
-      </div>
-    </div>
-
-    <div class="header-title">
-      <div class="doctitle">
-        <h1>PRESUPUESTO</h1>
-        <small class="muted">{{ empresa.nombre }}</small>
-      </div>
-    </div>
-  </div>
+        <div class="brand-sub">{{ empresa.cond_iva }}</div>
+      </td>
+      <td class="doc-cell">
+        <div class="doc-title">PRESUPUESTO</div>
+        <div class="doc-sub">{{ empresa.nombre }}</div>
+      </td>
+    </tr>
+  </table>
 
   <!-- Número / Fecha + Datos fiscales -->
-  <div class="grid g2 section">
-    <div class="card">
-      <div class="kv">
-        <div class="k">Número:</div><div class="v">{{ payload.meta.numero or "" }}</div>
-        <div class="k">Fecha:</div><div class="v">{{ hoy.strftime("%d/%m/%Y") }}</div>
+  <div class="cols section">
+    <div class="col">
+      <div class="card">
+        <table class="kv">
+          <tr><td class="k">Número:</td><td class="v">{{ payload.meta.numero or "" }}</td></tr>
+          <tr><td class="k">Fecha:</td><td class="v">{{ hoy.strftime("%d/%m/%Y") }}</td></tr>
+        </table>
       </div>
     </div>
-    <div class="card">
-      <div class="kv">
-        <div class="k">Inicio Act.:</div><div class="v">{{ empresa.inicio_act }}</div>
-        <div class="k">Ing. Brutos:</div><div class="v">{{ empresa.ing_brutos }}</div>
-        <div class="k">CUIT:</div><div class="v">{{ empresa.cuit }}</div>
+    <div class="col">
+      <div class="card">
+        <table class="kv">
+          <tr><td class="k">Inicio Act.:</td><td class="v">{{ empresa.inicio_act }}</td></tr>
+          <tr><td class="k">Ing. Brutos:</td><td class="v">{{ empresa.ing_brutos }}</td></tr>
+          <tr><td class="k">CUIT:</td><td class="v">{{ empresa.cuit }}</td></tr>
+        </table>
       </div>
     </div>
   </div>
 
   <!-- Domicilio / Cliente / Moneda - Vencimiento -->
-  <div class="grid g2 section">
-    <div class="card">
-      <div class="kv">
-        <div class="k">Domicilio:</div><div class="v">{{ empresa.domicilio }}</div>
-        <div class="k">Sr. (es):</div><div class="v">{{ payload.cliente.nombre or "Consumidor Final" }}</div>
-        <div class="k">Cond. IVA:</div><div class="v">{{ empresa.cond_iva_cliente or "Consumidor Final" }}</div>
+  <div class="cols section">
+    <div class="col">
+      <div class="card">
+        <table class="kv">
+          <tr><td class="k">Domicilio:</td><td class="v">{{ empresa.domicilio }}</td></tr>
+          <tr><td class="k">Sr. (es):</td><td class="v">{{ payload.cliente.nombre or "Consumidor Final" }}</td></tr>
+          <tr><td class="k">Cond. IVA:</td><td class="v">{{ empresa.cond_iva_cliente or "Consumidor Final" }}</td></tr>
+        </table>
       </div>
     </div>
-    <div class="card">
-      <div class="kv">
-        <div class="k">Moneda:</div><div class="v">Pesos Argentinos</div>
-        <div class="k">Fecha Vto.:</div><div class="v">{{ vto.strftime("%d/%m/%Y") }}</div>
+    <div class="col">
+      <div class="card">
+        <table class="kv">
+          <tr><td class="k">Moneda:</td><td class="v">Pesos Argentinos</td></tr>
+          <tr><td class="k">Fecha Vto.:</td><td class="v">{{ vto.strftime("%d/%m/%Y") }}</td></tr>
+        </table>
+
+        {% if payload.cliente.email or payload.cliente.telefono %}
+        <table class="kv" style="margin-top:6px;">
+          {% if payload.cliente.email %}
+          <tr><td class="k">Email:</td><td class="v">{{ payload.cliente.email }}</td></tr>
+          {% endif %}
+          {% if payload.cliente.telefono %}
+          <tr><td class="k">Tel.:</td><td class="v">{{ payload.cliente.telefono }}</td></tr>
+          {% endif %}
+        </table>
+        {% endif %}
       </div>
-      {% if payload.cliente.email or payload.cliente.telefono %}
-      <div class="kv mt-6">
-        {% if payload.cliente.email %}<div class="k">Email:</div><div class="v">{{ payload.cliente.email }}</div>{% endif %}
-        {% if payload.cliente.telefono %}<div class="k">Tel.:</div><div class="v">{{ payload.cliente.telefono }}</div>{% endif %}
-      </div>
-      {% endif %}
     </div>
   </div>
 
@@ -161,14 +153,14 @@
       <col class="c-code">
       <col class="c-desc">
       <col class="c-qty">
-      <col class="c-amount">
+      <col class="c-amt">
     </colgroup>
     <thead>
       <tr>
         <th>Cód.</th>
         <th>Artículo</th>
-        <th class="num">Cantidad</th>
-        <th class="num">Importe</th>
+        <th>Cantidad</th>
+        <th>Importe</th>
       </tr>
     </thead>
     <tbody>
@@ -178,14 +170,14 @@
         {% set dto     = (it.descuento or 0) | float %}
         {% set importe = (cant * precio) * (1 - dto / 100.0) %}
         <tr>
-          <td>{{ "%03d"|format(loop.index) }}</td>
+          <td class="num">{{ "%03d"|format(loop.index) }}</td>
           <td>
             <div><strong>{{ it.producto }}</strong></div>
             {% if it.observacion %}
               <div style="margin-top:2px;">{{ it.observacion | replace('\n','<br>') | safe }}</div>
             {% endif %}
           </td>
-          <td class="num">{{ "%.2f"|format(cant) }}</td>
+          <td class="num">{{ "%.0f"|format(cant) }}</td>
           <td class="num">{{ importe|money }}</td>
         </tr>
       {% endfor %}
@@ -194,9 +186,9 @@
 
   <!-- Totales -->
   <div class="totals">
-    <div class="row">
-      <div class="label">Total</div>
-      <div class="value">{{ total_pc|money }}</div>
+    <div class="totals-box">
+      <div class="totals-label">Total</div>
+      <div class="totals-value">{{ total_pc|money }}</div>
     </div>
   </div>
 
