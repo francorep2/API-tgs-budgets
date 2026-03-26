@@ -246,27 +246,62 @@
       {{ totales.efectivo | money }}
     </div>
   </div>
+<!-- PRECIOS -->
+<div style="margin-top:10px;">
 
-  <!-- BBVA ARRIBA -->
+  <!-- PRECIO LISTA -->
+  <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px;">
+    <div style="color:#666;">Precio Lista</div>
+    <div style="font-weight:700;">{{ totales.precio_lista | money }}</div>
+  </div>
+
+  <!-- EFECTIVO -->
+  <div style="
+    background:#dff5e4;
+    border:1px solid #b7e4c7;
+    border-radius:8px;
+    padding:8px 10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+  ">
+    <div style="color:#1b5e20; font-weight:600;">
+      Efectivo / Transferencia
+    </div>
+    <div style="color:#1b5e20; font-size:18px; font-weight:700;">
+      {{ totales.efectivo | money }}
+    </div>
+  </div>
+
+  <!-- BBVA -->
   <div style="
     border:1px solid #cfe2ff;
     background:#e7f0ff;
     border-radius:10px;
     padding:10px;
-    margin-bottom:8px;
+    margin-bottom:10px;
   ">
-    <div style="font-weight:700; color:#0d47a1; margin-bottom:6px;">
-      BBVA - SIN INTERÉS
+    <div style="font-weight:700; color:#0d47a1; margin-bottom:8px;">
+      BBVA - Banco Frances
     </div>
 
-    <div style="display:flex; justify-content:space-between; font-size:13px; color:#0d47a1;">
-      <span>3 cuotas</span>
-      <span style="font-weight:600;">{{ totales.bbva_3 | money }}</span>
+    <div style="margin-bottom:6px;">
+      <div style="font-size:12px; color:#0d47a1;">
+        3 cuotas sin interés
+      </div>
+      <div style="font-size:15px; font-weight:700; color:#0d47a1;">
+        {{ totales.bbva_3 | money }}
+      </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; font-size:13px; color:#0d47a1; margin-top:4px;">
-      <span>6 cuotas</span>
-      <span style="font-weight:600;">{{ totales.bbva_6 | money }}</span>
+    <div>
+      <div style="font-size:12px; color:#0d47a1;">
+        6 cuotas sin interés
+      </div>
+      <div style="font-size:16px; font-weight:700; color:#0d47a1;">
+        {{ totales.bbva_6 | money }}
+      </div>
     </div>
   </div>
 
@@ -282,28 +317,31 @@
       Otros Bancos
     </div>
 
-    <!-- 3 -->
-    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-      <span style="font-size:12px; color:#888;">3 cuotas</span>
-      <span style="font-size:14px; font-weight:600; color:#444;">
+    <div style="margin-bottom:6px;">
+      <div style="font-size:12px; color:#888;">
+        3 cuotas
+      </div>
+      <div style="font-size:14px; font-weight:600; color:#555;">
         {{ totales.cuotas_3 | money }}
-      </span>
+      </div>
     </div>
 
-    <!-- 6 -->
-    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-      <span style="font-size:12px; color:#888;">6 cuotas</span>
-      <span style="font-size:14px; font-weight:600; color:#444;">
+    <div style="margin-bottom:6px;">
+      <div style="font-size:12px; color:#888;">
+        6 cuotas
+      </div>
+      <div style="font-size:14px; font-weight:600; color:#555;">
         {{ totales.cuotas_6 | money }}
-      </span>
+      </div>
     </div>
 
-    <!-- 12 -->
-    <div style="display:flex; justify-content:space-between;">
-      <span style="font-size:12px; color:#888;">12 cuotas</span>
-      <span style="font-size:14px; font-weight:600; color:#444;">
+    <div>
+      <div style="font-size:12px; color:#888;">
+        12 cuotas
+      </div>
+      <div style="font-size:14px; font-weight:600; color:#555;">
         {{ totales.cuotas_12 | money }}
-      </span>
+      </div>
     </div>
 
   </div>
