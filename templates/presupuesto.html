@@ -224,30 +224,34 @@
 
   <!-- BBVA -->
   <div style="
-    border:1px solid #e6e6e6;
+    border:1px solid #cfe2ff;
     border-radius:10px;
     padding:10px;
     margin-bottom:8px;
-    background:#ffffff;
+    background:#e7f0ff;
   ">
-    <div style="font-weight:700; color:#c1161d; margin-bottom:6px;">
+    <div style="
+      font-weight:700;
+      color:#0d47a1;
+      margin-bottom:6px;
+    ">
       BBVA - SIN INTERÉS
     </div>
 
     <div style="display:table; width:100%;">
-      <div style="display:table-cell; font-size:13px;">
+      <div style="display:table-cell; font-size:13px; color:#0d47a1;">
         3 cuotas
       </div>
-      <div style="display:table-cell; text-align:right; font-weight:700;">
+      <div style="display:table-cell; text-align:right; font-weight:700; color:#0d47a1;">
         {{ totales.bbva_3 | money }}
       </div>
     </div>
 
     <div style="display:table; width:100%; margin-top:4px;">
-      <div style="display:table-cell; font-size:13px;">
+      <div style="display:table-cell; font-size:13px; color:#0d47a1;">
         6 cuotas
       </div>
-      <div style="display:table-cell; text-align:right; font-weight:700;">
+      <div style="display:table-cell; text-align:right; font-weight:700; color:#0d47a1;">
         {{ totales.bbva_6 | money }}
       </div>
     </div>
@@ -258,21 +262,26 @@
     border:1px solid #e6e6e6;
     border-radius:10px;
     padding:10px;
-    background:#ffffff;
+    background:#fafafa;
   ">
-    <div style="font-weight:700; color:#c1161d; margin-bottom:6px;">
+    <div style="
+      font-weight:700;
+      color:#666;
+      margin-bottom:6px;
+    ">
       Otros Bancos
     </div>
 
     <!-- 3 CUOTAS -->
     <div style="
-      border:1px solid #f0f0f0;
+      border:1px solid #eee;
       border-radius:8px;
       padding:6px 8px;
       margin-bottom:6px;
+      background:#ffffff;
     ">
-      <div style="font-size:11px; color:#777;">3 cuotas</div>
-      <div style="font-size:15px; font-weight:700; text-align:right;">
+      <div style="font-size:11px; color:#888;">3 cuotas</div>
+      <div style="font-size:15px; font-weight:700; text-align:right; color:#333;">
         {{ totales.cuotas_3 | money }}
       </div>
     </div>
@@ -293,12 +302,13 @@
 
     <!-- 12 CUOTAS -->
     <div style="
-      border:1px solid #f0f0f0;
+      border:1px solid #eee;
       border-radius:8px;
       padding:6px 8px;
+      background:#ffffff;
     ">
-      <div style="font-size:11px; color:#777;">12 cuotas</div>
-      <div style="font-size:15px; font-weight:700; text-align:right;">
+      <div style="font-size:11px; color:#888;">12 cuotas</div>
+      <div style="font-size:15px; font-weight:700; text-align:right; color:#333;">
         {{ totales.cuotas_12 | money }}
       </div>
     </div>
