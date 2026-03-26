@@ -183,42 +183,103 @@
       {% endfor %}
     </tbody>
   </table>
+  <div class="totals">
+  <div style="
+    border:1px solid #e6e6e6;
+    border-radius:10px;
+    padding:12px 14px;
+    background:#fafafa;
+    width:100%;
+  ">
 
-  <!-- Totales -->
- <div class="totals">
-  <div class="totals-box">
+    <!-- PRECIO LISTA -->
+    <div style="display:table; width:100%; margin:4px 0;">
+      <div style="display:table-cell; text-align:left; color:#555;">
+        Precio Lista
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:600;">
+        {{ totales.total_PC | money }}
+      </div>
+    </div>
 
-    <!-- Precio lista -->
-    <div class="totals-label">Total Precio Lista</div>
-    <div class="totals-value">{{ totales.total_PC | money }}</div>
+    <!-- EFECTIVO DESTACADO -->
+    <div style="
+      display:table;
+      width:100%;
+      margin:8px 0;
+      background:#e8f7ee;
+      border:1px solid #b7e4c7;
+      border-radius:8px;
+      padding:6px 8px;
+    ">
+      <div style="display:table-cell; text-align:left; font-weight:600; color:#1b5e20;">
+        Efectivo / Transferencia
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:700; font-size:16px; color:#1b5e20;">
+        {{ totales.total_PC_efv | money }}
+      </div>
+    </div>
 
-    <!-- Efectivo -->
-    <div class="totals-label">Total Efectivo / Transferencia</div>
-    <div class="totals-value">{{ totales.total_PC_efv | money }}</div>
-
-    <hr style="margin:8px 0;">
+    <!-- DIVIDER -->
+    <div style="border-top:1px solid #ddd; margin:8px 0;"></div>
 
     <!-- BBVA -->
-    <div class="totals-label"><strong>BBVA</strong></div>
-    <div class="totals-label">3 Cuotas sin interés</div>
-    <div class="totals-value">{{ totales.bbva_3 | money }}</div>
+    <div style="font-weight:700; font-size:12px; color:#c1161d; margin-top:6px;">
+      BBVA
+    </div>
 
-    <div class="totals-label">6 Cuotas sin interés</div>
-    <div class="totals-value">{{ totales.bbva_6 | money }}</div>
+    <div style="display:table; width:100%; margin:4px 0;">
+      <div style="display:table-cell; text-align:left; color:#555;">
+        3 cuotas sin interés
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:600;">
+        {{ totales.bbva_3 | money }}
+      </div>
+    </div>
 
-    <hr style="margin:8px 0;">
+    <div style="display:table; width:100%; margin:4px 0;">
+      <div style="display:table-cell; text-align:left; color:#555;">
+        6 cuotas sin interés
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:600;">
+        {{ totales.bbva_6 | money }}
+      </div>
+    </div>
 
-    <!-- Otros bancos -->
-    <div class="totals-label"><strong>Otros Bancos</strong></div>
+    <!-- DIVIDER -->
+    <div style="border-top:1px solid #ddd; margin:8px 0;"></div>
 
-    <div class="totals-label">3 Cuotas</div>
-    <div class="totals-value">{{ totales.cuotas_3 | money }}</div>
+    <!-- OTROS -->
+    <div style="font-weight:700; font-size:12px; color:#c1161d;">
+      Otros Bancos
+    </div>
 
-    <div class="totals-label">6 Cuotas</div>
-    <div class="totals-value">{{ totales.cuotas_6 | money }}</div>
+    <div style="display:table; width:100%; margin:4px 0;">
+      <div style="display:table-cell; text-align:left; color:#555;">
+        3 cuotas
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:600;">
+        {{ totales.cuotas_3 | money }}
+      </div>
+    </div>
 
-    <div class="totals-label">12 Cuotas</div>
-    <div class="totals-value">{{ totales.cuotas_12 | money }}</div>
+    <div style="display:table; width:100%; margin:4px 0;">
+      <div style="display:table-cell; text-align:left; color:#555;">
+        6 cuotas
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:600;">
+        {{ totales.cuotas_6 | money }}
+      </div>
+    </div>
+
+    <div style="display:table; width:100%; margin:4px 0;">
+      <div style="display:table-cell; text-align:left; color:#555;">
+        12 cuotas
+      </div>
+      <div style="display:table-cell; text-align:right; font-weight:600;">
+        {{ totales.cuotas_12 | money }}
+      </div>
+    </div>
 
   </div>
 </div>
@@ -233,3 +294,4 @@
 
 </body>
 </html>
+
