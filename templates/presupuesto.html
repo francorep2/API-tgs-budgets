@@ -185,12 +185,43 @@
   </table>
 
   <!-- Totales -->
-  <div class="totals">
-    <div class="totals-box">
-      <div class="totals-label">Total</div>
-      <div class="totals-value">{{ total_pc|money }}</div>
-    </div>
+ <div class="totals">
+  <div class="totals-box">
+
+    <!-- Precio lista -->
+    <div class="totals-label">Total Precio Lista</div>
+    <div class="totals-value">{{ totales.total_PC | money }}</div>
+
+    <!-- Efectivo -->
+    <div class="totals-label">Total Efectivo / Transferencia</div>
+    <div class="totals-value">{{ totales.total_PC_efv | money }}</div>
+
+    <hr style="margin:8px 0;">
+
+    <!-- BBVA -->
+    <div class="totals-label"><strong>BBVA</strong></div>
+    <div class="totals-label">3 Cuotas sin interés</div>
+    <div class="totals-value">{{ totales.bbva_3 | money }}</div>
+
+    <div class="totals-label">6 Cuotas sin interés</div>
+    <div class="totals-value">{{ totales.bbva_6 | money }}</div>
+
+    <hr style="margin:8px 0;">
+
+    <!-- Otros bancos -->
+    <div class="totals-label"><strong>Otros Bancos</strong></div>
+
+    <div class="totals-label">3 Cuotas</div>
+    <div class="totals-value">{{ totales.cuotas_3 | money }}</div>
+
+    <div class="totals-label">6 Cuotas</div>
+    <div class="totals-value">{{ totales.cuotas_6 | money }}</div>
+
+    <div class="totals-label">12 Cuotas</div>
+    <div class="totals-value">{{ totales.cuotas_12 | money }}</div>
+
   </div>
+</div>
 
   <!-- Observaciones -->
   {% if payload.observaciones %}
