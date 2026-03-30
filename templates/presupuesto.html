@@ -100,8 +100,8 @@
         <table class="kv">
           <tr><td class="k">Número:</td><td class="v">{{ payload.meta.numero or "" }}</td></tr>
           <tr><td class="k">Fecha:</td><td class="v">{{ hoy.strftime("%d/%m/%Y") }}</td></tr>
-          <tr><td class="k"></td> <td class="v"></td></tr>
-          <tr><td class="k"></td> <td class="v"></td></tr>
+          <tr><td class="k">Moneda:</td><td class="v">Pesos Argentinos</td></tr>
+          <tr><td class="k">Fecha Vto.:</td><td class="v">{{ vto.strftime("%d/%m/%Y") }}</td></tr>
         </table>
       </div>
     </div>
@@ -111,29 +111,12 @@
           <tr><td class="k">Inicio Act.:</td><td class="v">{{ empresa.inicio_act }}</td></tr>
           <tr><td class="k">Ing. Brutos:</td><td class="v">{{ empresa.ing_brutos }}</td></tr>
           <tr><td class="k">CUIT:</td><td class="v">{{ empresa.cuit }}</td></tr>
+          <tr><td class="k">Domicilio:</td><td class="v">{{ empresa.domicilio }}</td></tr>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Domicilio / Cliente / Moneda - Vencimiento -->
-  <div class="cols section">
-    <div class="col">
-      <div class="card">
-        <table class="kv">
-          <tr><td class="k">Domicilio:</td><td class="v">{{ empresa.domicilio }}</td></tr>
-          <tr><td class="k">Sr. (es):</td><td class="v">{{ payload.cliente.nombre or "Consumidor Final" }}</td></tr>
-          <tr><td class="k">Cond. IVA:</td><td class="v">{{ empresa.cond_iva_cliente or "Consumidor Final" }}</td></tr>
-        </table>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <table class="kv">
-          <tr><td class="k">Moneda:</td><td class="v">Pesos Argentinos</td></tr>
-          <tr><td class="k">Fecha Vto.:</td><td class="v">{{ vto.strftime("%d/%m/%Y") }}</td></tr>
-          <tr><td class="k"></td> <td class="v"></td></tr>
-          <tr><td class="k"></td> <td class="v"></td></tr>
 
         </table>
 
@@ -199,9 +182,9 @@
     <!-- PRECIO LISTA -->
     <div style="display:table; width:100%; margin:4px 0;">
       <div style="display:table-cell; text-align:left; color:#555;">
-        Precio Lista
+        Precio de Lista
       </div>
-      <div style="display:table-cell; text-align:right; font-weight:600;">
+      <div style="display:table-cell; color:red;text-align:right; font-weight:600;">
         {{ totales.total_PC | money }}
       </div>
     </div>
@@ -231,7 +214,7 @@
     padding:10px;
     margin-bottom:10px;
   ">
-    <div style="font-weight:700; font-size:15px; color:#0d47a1; margin-bottom:8px;">
+    <div style="font-weight:700; font-size:14px; color:#0d47a1; margin-bottom:8px;">
       Cuotas con BBVA - Banco Frances
     </div>
 
@@ -263,7 +246,7 @@
   ">
 
     <div style="font-weight:700; color:#c1161d; margin-bottom:8px;">
-      Otros Bancos
+      Cuotas con otros Bancos
     </div>
 
     <div style="margin-bottom:6px;">
