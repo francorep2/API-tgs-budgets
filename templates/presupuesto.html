@@ -3,135 +3,543 @@
 <head>
   <meta charset="utf-8">
   <title>Presupuesto</title>
-  <style>
-    /* Paleta y tipografía (sin CSS variables) */
-    body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #111; }
-    .muted { color: #666; }
 
-    /* Márgenes de página */
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11.5px;
+      color: #111;
+      margin: 0;
+      line-height: 1.35;
+      background: #fff;
+    }
+
     @page {
       size: A4;
-      margin: 16mm 14mm 18mm 14mm;
+      margin: 13mm 12mm 18mm 12mm;
+
       @bottom-center {
-        content: "Página " counter(page);
-        color: #444;
+        content: "The Gamer Shop - Tu tienda Gamer de Confianza     Carhue 1409 - Mataderos/Barrio Naon CABA CP1440 - 11 2512 1409";
+        color: #555;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 10px;
+        font-size: 8.8px;
       }
     }
 
-    /* Utilitarios */
-    * { box-sizing: border-box; }
-    .section { margin-top: 12px; }
-    .card { border: 1px solid #e6e6e6; border-radius: 8px; padding: 10px 12px; }
-    .kv { width: 100%; border-collapse: collapse; }
-    .kv td.k { width: 120px; color: #666; vertical-align: top; padding: 3px 6px 3px 0; }
-    .kv td.v { font-weight: 600; vertical-align: top; padding: 3px 0; }
+    .section {
+      margin-top: 10px;
+    }
 
-    /* Header (tabla para compatibilidad) */
-    table.hdr { width: 100%; border-collapse: collapse; }
-    table.hdr td { vertical-align: top; }
-    .brand-cell { width: 60%; }
-    .brand-line { white-space: nowrap; }
-    .brand-logo { height: 64px; vertical-align: middle; }
-    .brand-name { font-size: 20px; font-weight: 700; vertical-align: middle; margin-left: 10px; display: inline-block; }
-    .brand-sub { color: #666; font-size: 12px; margin-top: 2px; }
+    /* Encabezado */
+    .header {
+      width: 100%;
+      border-collapse: collapse;
+      border-bottom: 2px solid #111;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
 
-    .doc-cell { width: 40%; text-align: center; }
-    .doc-title { font-size: 28px; font-weight: 700; letter-spacing: .4px; margin-top: 18px; }
-    .doc-sub { color: #666; font-size: 12px; margin-top: 2px; }
+    .header td {
+      vertical-align: middle;
+      padding-bottom: 8px;
+    }
 
-    /* Dos columnas (inline-block) para compatibilidad */
-    .cols { font-size: 0; }
-    .col { display: inline-block; vertical-align: top; width: 49.5%; font-size: 12px; }
-    .col + .col { margin-left: 1%; }
+    .brand-cell {
+      width: 60%;
+    }
 
-    /* Tabla de items */
-    table.items { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 8px; }
-    table.items col.c-code { width: 70px; }
-    table.items col.c-desc { width: auto; }
-    table.items col.c-qty  { width: 90px; }
-    table.items col.c-amt  { width: 130px; }
+    .brand-logo {
+      height: 52px;
+      vertical-align: middle;
+    }
+
+    .brand-info {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #111;
+    }
+
+    .brand-sub {
+      margin-top: 2px;
+      font-size: 10.5px;
+      color: #666;
+    }
+
+    .doc-cell {
+      width: 40%;
+      text-align: right;
+    }
+
+    .doc-title {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      color: #111;
+    }
+
+    .doc-meta {
+      margin-top: 3px;
+      font-size: 10.5px;
+      color: #555;
+    }
+
+    /* Bloques */
+    .cols {
+      font-size: 0;
+    }
+
+    .col {
+      display: inline-block;
+      vertical-align: top;
+      width: 49.5%;
+      font-size: 11.5px;
+    }
+
+    .col + .col {
+      margin-left: 1%;
+    }
+
+    .box {
+      border: 1px solid #dedede;
+      border-radius: 8px;
+      padding: 9px 10px;
+      background: #fff;
+    }
+
+    .box-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: #c1161d;
+      text-transform: uppercase;
+      letter-spacing: .45px;
+      margin-bottom: 5px;
+    }
+
+    .kv {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .kv td.k {
+      width: 105px;
+      color: #666;
+      vertical-align: top;
+      padding: 2px 6px 2px 0;
+      font-size: 10.7px;
+    }
+
+    .kv td.v {
+      font-weight: 600;
+      vertical-align: top;
+      padding: 2px 0;
+      font-size: 11.2px;
+      color: #111;
+    }
+
+    /* Incluye */
+    .included {
+      margin-top: 10px;
+      padding: 7px 9px;
+      border: 1px solid #dedede;
+      border-left: 3px solid #c1161d;
+      border-radius: 8px;
+      background: #fafafa;
+      font-size: 10.8px;
+      color: #333;
+    }
+
+    .included strong {
+      color: #111;
+      font-weight: 800;
+    }
+
+    .included .warning {
+      color: #c1161d;
+      font-weight: 800;
+    }
+
+    /* Tabla de productos */
+    table.items {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 10px;
+      border: 1px solid #dedede;
+    }
+
+    table.items col.c-code {
+      width: 52px;
+    }
+
+    table.items col.c-desc {
+      width: auto;
+    }
+
+    table.items col.c-qty {
+      width: 65px;
+    }
+
+    table.items col.c-amt {
+      width: 118px;
+    }
 
     table.items thead th {
-      background: #c1161d; color: #fff; text-align: left;
-      padding: 7px 8px; font-weight: 700; font-size: 12px; border: 1px solid #c1161d;
+      background: #111;
+      color: #fff;
+      text-align: left;
+      padding: 7px 8px;
+      font-weight: 700;
+      font-size: 11px;
+      border: 1px solid #111;
     }
+
+    table.items thead th.amount {
+      text-align: right;
+    }
+
     table.items tbody td {
-      border-bottom: 1px solid #e6e6e6; padding: 7px 8px; vertical-align: top;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 6px 8px;
+      vertical-align: top;
+      font-size: 11.2px;
     }
-    td.num { text-align: right; white-space: nowrap; }
+
+    table.items tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    td.num {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .item-name {
+      font-weight: 700;
+      color: #111;
+    }
+
+    .item-obs {
+      margin-top: 2px;
+      color: #444;
+      font-size: 10.4px;
+    }
 
     /* Totales */
-    .totals { margin-top: 10px; text-align: right; }
-    .totals-box {
-      display: inline-block; min-width: 300px; text-align: left;
-      border: 1px solid #e6e6e6; border-radius: 8px; padding: 8px 10px;
+    .summary {
+      margin-top: 10px;
+      border: 1px solid #dedede;
+      border-radius: 8px;
+      padding: 9px 10px;
+      background: #fff;
     }
-    .totals-label { color: #666; }
-    .totals-value { font-weight: 700; font-size: 14px; text-align: right; }
 
-    /* Observaciones */
-    .obs { margin-top: 10px; font-size: 11px; color: #333; }
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .summary-table td {
+      padding: 4px 0;
+      vertical-align: middle;
+    }
+
+    .summary-label {
+      color: #555;
+      font-size: 11px;
+    }
+
+    .summary-value {
+      text-align: right;
+      font-weight: 800;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .summary-value.list {
+      color: #c1161d;
+    }
+
+    .cash-row td {
+      border-top: 1px solid #e8e8e8;
+      padding-top: 8px;
+    }
+
+    .cash-row .summary-label {
+      color: #1b5e20;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .summary-value.cash {
+      color: #1b5e20;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .cash-note {
+      display: block;
+      margin-top: 1px;
+      color: #4d7c57;
+      font-size: 9.8px;
+      font-weight: 600;
+    }
+
+    .installment-note {
+      margin-top: 7px;
+      padding: 6px 8px;
+      border: 1px solid #eeeeee;
+      border-left: 3px solid #c1161d;
+      background: #fafafa;
+      font-size: 10.2px;
+      color: #444;
+      line-height: 1.35;
+    }
+
+    .installment-note strong {
+      color: #111;
+      font-weight: 800;
+    }
+
+    /* Cuotas */
+    .installments {
+      margin-top: 7px;
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #dedede;
+    }
+
+    .installments th {
+      background: #f4f4f4;
+      color: #111;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .35px;
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 1px solid #dedede;
+    }
+
+    .installments td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #eeeeee;
+      font-size: 11px;
+      vertical-align: middle;
+    }
+
+    .installments tr:last-child td {
+      border-bottom: none;
+    }
+
+    .installments .bank {
+      width: 34%;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .installments .plan {
+      width: 33%;
+      color: #555;
+    }
+
+    .installments .amount {
+      width: 33%;
+      text-align: right;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .installments .bbva {
+      color: #0d47a1;
+    }
+
+    .bbva-note-row td {
+      background: #f8fbff;
+      color: #333;
+      font-size: 10.2px;
+      line-height: 1.35;
+      padding: 6px 8px;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .bbva-note-row strong {
+      color: #0d47a1;
+      font-weight: 800;
+    }
+
+    /* Política */
+    .policy {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border: 1px solid #dedede;
+      border-radius: 8px;
+      background: #fafafa;
+      font-size: 10.4px;
+      line-height: 1.38;
+      color: #333;
+    }
+
+    .policy strong {
+      color: #111;
+      font-weight: 800;
+    }
+
+    .policy a {
+      color: #c1161d;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .policy-url {
+      margin-top: 3px;
+      font-size: 9.8px;
+      color: #555;
+      word-break: break-all;
+    }
+
+    /* Footer visible */
+    .footer {
+      margin-top: 12px;
+      padding-top: 7px;
+      border-top: 1px solid #dedede;
+      font-size: 9.6px;
+      color: #555;
+      display: table;
+      width: 100%;
+    }
+
+    .footer span {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    .footer span:last-child {
+      text-align: right;
+    }
   </style>
 </head>
+
 <body>
+
   <!-- Encabezado -->
-  <table class="hdr">
+  <table class="header">
     <tr>
       <td class="brand-cell">
-        <div class="brand-line">
-          <img src="logo.png" alt="Logo" class="brand-logo">
-          <span class="brand-name">{{ empresa.nombre }}</span>
+        <img src="logo.png" alt="Logo" class="brand-logo">
+
+        <div class="brand-info">
+          <div class="brand-name">{{ empresa.nombre }}</div>
+          <div class="brand-sub">{{ empresa.cond_iva }}</div>
         </div>
-        <div class="brand-sub">{{ empresa.cond_iva }}</div>
       </td>
+
       <td class="doc-cell">
         <div class="doc-title">PRESUPUESTO</div>
-        <div class="doc-sub">{{ empresa.nombre }}</div>
+        <div class="doc-meta">
+          Nº {{ payload.meta.numero or "" }} · {{ hoy.strftime("%d/%m/%Y") }}
+        </div>
       </td>
     </tr>
   </table>
 
-  <!-- Número / Fecha + Datos fiscales -->
+  <!-- Datos principales -->
   <div class="cols section">
     <div class="col">
-      <div class="card">
+      <div class="box">
+        <div class="box-title">Datos del presupuesto</div>
+
         <table class="kv">
-          <tr><td class="k">Número:</td><td class="v">{{ payload.meta.numero or "" }}</td></tr>
-          <tr><td class="k">Fecha:</td><td class="v">{{ hoy.strftime("%d/%m/%Y") }}</td></tr>
-          <tr><td class="k">Moneda:</td><td class="v">Pesos Argentinos</td></tr>
-          <tr><td class="k">Fecha Vto.:</td><td class="v">{{ vto.strftime("%d/%m/%Y") }}</td></tr>
+          <tr>
+            <td class="k">Número:</td>
+            <td class="v">{{ payload.meta.numero or "" }}</td>
+          </tr>
+          <tr>
+            <td class="k">Fecha:</td>
+            <td class="v">{{ hoy.strftime("%d/%m/%Y") }}</td>
+          </tr>
+          <tr>
+            <td class="k">Moneda:</td>
+            <td class="v">Pesos Argentinos</td>
+          </tr>
+          <tr>
+            <td class="k">Válido hasta:</td>
+            <td class="v">{{ vto.strftime("%d/%m/%Y") }}</td>
+          </tr>
         </table>
       </div>
     </div>
+
     <div class="col">
-      <div class="card">
+      <div class="box">
+        <div class="box-title">Datos fiscales</div>
+
         <table class="kv">
-          <tr><td class="k">Inicio Act.:</td><td class="v">{{ empresa.inicio_act }}</td></tr>
-          <tr><td class="k">Ing. Brutos:</td><td class="v">{{ empresa.ing_brutos }}</td></tr>
-          <tr><td class="k">CUIT:</td><td class="v">{{ empresa.cuit }}</td></tr>
-          <tr><td class="k">Domicilio:</td><td class="v">{{ empresa.domicilio }}</td></tr>
+          <tr>
+            <td class="k">Inicio Act.:</td>
+            <td class="v">{{ empresa.inicio_act }}</td>
+          </tr>
+          <tr>
+            <td class="k">Ing. Brutos:</td>
+            <td class="v">{{ empresa.ing_brutos }}</td>
+          </tr>
+          <tr>
+            <td class="k">CUIT:</td>
+            <td class="v">{{ empresa.cuit }}</td>
+          </tr>
+          <tr>
+            <td class="k">Domicilio:</td>
+            <td class="v">{{ empresa.domicilio }}</td>
+          </tr>
         </table>
       </div>
     </div>
   </div>
 
+  <!-- Cliente -->
+  {% if payload.cliente %}
+  <div class="section">
+    <div class="box">
+      <div class="box-title">Cliente</div>
 
-        </table>
-
-        {% if payload.cliente.email or payload.cliente.telefono %}
-        <table class="kv" style="margin-top:6px;">
-          {% if payload.cliente.email %}
-          <tr><td class="k">Email:</td><td class="v">{{ payload.cliente.email }}</td></tr>
-          {% endif %}
-          {% if payload.cliente.telefono %}
-          <tr><td class="k">Tel.:</td><td class="v">{{ payload.cliente.telefono }}</td></tr>
-          {% endif %}
-        </table>
+      <table class="kv">
+        {% if payload.cliente.nombre %}
+        <tr>
+          <td class="k">Nombre:</td>
+          <td class="v">{{ payload.cliente.nombre }}</td>
+        </tr>
         {% endif %}
-      </div>
+
+        {% if payload.cliente.email %}
+        <tr>
+          <td class="k">Email:</td>
+          <td class="v">{{ payload.cliente.email }}</td>
+        </tr>
+        {% endif %}
+
+        {% if payload.cliente.telefono %}
+        <tr>
+          <td class="k">Tel.:</td>
+          <td class="v">{{ payload.cliente.telefono }}</td>
+        </tr>
+        {% endif %}
+      </table>
     </div>
+  </div>
+  {% endif %}
+
+  <!-- Incluye -->
+  <div class="included">
+    <strong>Incluye:</strong> Windows 11/10 Pro <span class="warning">sin licencia</span>.
   </div>
 
   <!-- Detalle -->
@@ -142,152 +550,136 @@
       <col class="c-qty">
       <col class="c-amt">
     </colgroup>
+
     <thead>
       <tr>
         <th>Cód.</th>
         <th>Artículo</th>
-        <th>Cantidad</th>
-        <th>Importe</th>
+        <th>Cant.</th>
+        <th class="amount">Importe</th>
       </tr>
     </thead>
+
     <tbody>
       {% for it in lineas %}
         {% set cant    = (it.cantidad or 1) | float %}
         {% set precio  = (it.precio_unit or 0) | float %}
         {% set dto     = (it.descuento or 0) | float %}
         {% set importe = (cant * precio) * (1 - dto / 100.0) %}
+
         <tr>
           <td class="num">{{ "%03d"|format(loop.index) }}</td>
+
           <td>
-            <div><strong>{{ it.producto }}</strong></div>
+            <div class="item-name">{{ it.producto }}</div>
+
             {% if it.observacion %}
-              <div style="margin-top:2px;">{{ it.observacion | replace('\n','<br>') | safe }}</div>
+              <div class="item-obs">
+                {{ it.observacion | replace('\n','<br>') | safe }}
+              </div>
             {% endif %}
           </td>
+
           <td class="num">{{ "%.0f"|format(cant) }}</td>
           <td class="num">{{ importe|money }}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-  <div class="totals">
-  <div style="
-    border:1px solid #ffffff;
-    border-radius:10px;
-    padding:12px 14px;
-    background:solid #ffffff;
-    width:100%;
-  ">
 
-    <!-- PRECIO LISTA -->
-    <div style="display:table; width:100%; margin:4px 0;">
-      <div style="display:table-cell; text-align:left; color:#555;">
-        Precio de Lista
-      </div>
-      <div style="display:table-cell; color:red;text-align:right; font-weight:600;">
-        {{ totales.total_PC | money }}
-      </div>
+  <!-- Totales -->
+  <div class="summary">
+    <table class="summary-table">
+      <tr>
+        <td class="summary-label">Precio de lista</td>
+        <td class="summary-value list">{{ totales.total_PC | money }}</td>
+      </tr>
+
+      <tr class="cash-row">
+        <td class="summary-label">
+          Efectivo / Transferencia
+          <span class="cash-note">Precio final abonando en efectivo o transferencia</span>
+        </td>
+        <td class="summary-value cash">{{ totales.total_PC_efv | money }}</td>
+      </tr>
+    </table>
+
+    <div class="installment-note">
+      <strong>Importante:</strong> los valores en cuotas se calculan sobre el <strong>precio de lista</strong>, no sobre el precio de efectivo/transferencia.
     </div>
 
-    <!-- EFECTIVO DESTACADO -->
-    <div style="
-      display:table;
-      width:100%;
-      margin:8px 0;
-      background:#e8f7ee;
-      border:1px solid #b7e4c7;
-      border-radius:8px;
-      padding:6px 8px;
-    ">
-      <div style="display:table-cell; text-align:left; font-weight:600; color:#1b5e20;">
-        Efectivo / Transferencia
-      </div>
-      <div style="display:table-cell; text-align:right; font-weight:700; font-size:16px; color:#1b5e20;">
-        {{ totales.total_PC_efv | money }}
-      </div>
-    </div>
-  <!-- BBVA -->
-  <div style="
-    border:1px solid #cfe2ff;
-    background:#e7f0ff;
-    border-radius:10px;
-    padding:10px;
-    margin-bottom:10px;
-  ">
-    <div style="font-weight:700; font-size:14px; color:#0d47a1; margin-bottom:8px;">
-      Cuotas con BBVA - Banco Frances
-    </div>
+    <table class="installments">
+      <thead>
+        <tr>
+          <th>Banco / Medio</th>
+          <th>Plan</th>
+          <th style="text-align:right;">Importe</th>
+        </tr>
+      </thead>
 
-    <div style="margin-bottom:6px;">
-      <div style="font-size:12px; color:#0d47a1;">
-        3 cuotas sin interés
-      </div>
-      <div style="font-size:14px; font-weight:700; color:#0d47a1;">
-        {{ totales.bbva_3 | money }}
-      </div>
-    </div>
+      <tbody>
+        <tr>
+          <td class="bank bbva">BBVA - Banco Francés</td>
+          <td class="plan bbva">3 cuotas sin interés</td>
+          <td class="amount bbva">{{ totales.bbva_3 | money }}</td>
+        </tr>
 
-    <div>
-      <div style="font-size:12px; color:#0d47a1;">
-        6 cuotas sin interés
-      </div>
-      <div style="font-size:14px; font-weight:700; color:#0d47a1;">
-        {{ totales.bbva_6 | money }}
-      </div>
+        <tr>
+          <td class="bank bbva">BBVA - Banco Francés</td>
+          <td class="plan bbva">6 cuotas sin interés</td>
+          <td class="amount bbva">{{ totales.bbva_6 | money }}</td>
+        </tr>
+
+        <tr class="bbva-note-row">
+          <td colspan="3">
+            <strong>Promoción BBVA:</strong>
+            las 3 cuotas sin interés aplican todos los viernes y sábados.
+            Las 6 cuotas sin interés aplican únicamente 1 día al mes, generalmente a mediados de mes.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="bank">Otros bancos</td>
+          <td class="plan">3 cuotas</td>
+          <td class="amount">{{ totales.cuotas_3 | money }}</td>
+        </tr>
+
+        <tr>
+          <td class="bank">Otros bancos</td>
+          <td class="plan">6 cuotas</td>
+          <td class="amount">{{ totales.cuotas_6 | money }}</td>
+        </tr>
+
+        <tr>
+          <td class="bank">Otros bancos</td>
+          <td class="plan">12 cuotas</td>
+          <td class="amount">{{ totales.cuotas_12 | money }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Política de aceptación -->
+  <div class="policy">
+    <strong>Importante:</strong>
+    al aceptar este presupuesto, ya sea mediante compromiso verbal o monetario
+    —seña, abono total, abono parcial o cualquier confirmación de compra/servicio—,
+    el cliente declara conocer y aceptar las
+    <a href="https://thegamershop.com.ar/rma-servicio-tecnico-garantias/" target="_blank">
+      Políticas de Servicio Técnico y RMA
+    </a>.
+
+    <div class="policy-url">
+      Link para presupuestos impresos:
+      https://thegamershop.com.ar/rma-servicio-tecnico-garantias/
     </div>
   </div>
 
-  <!-- OTROS BANCOS -->
-  <div style="
-    border:1px solid #e6e6e6;
-    border-radius:10px;
-    padding:10px;
-    background:#fafafa;
-  ">
-
-    <div style="font-weight:700; color:#c1161d; margin-bottom:8px;">
-      Cuotas con otros Bancos
-    </div>
-
-    <div style="margin-bottom:6px;">
-      <div style="font-size:12px; color:#888;">
-        3 cuotas
-      </div>
-      <div style="font-size:14px; font-weight:600; color:#555;">
-        {{ totales.cuotas_3 | money }}
-      </div>
-    </div>
-
-    <div style="margin-bottom:6px;">
-      <div style="font-size:12px; color:#888;">
-        6 cuotas
-      </div>
-      <div style="font-size:14px; font-weight:600; color:#555;">
-        {{ totales.cuotas_6 | money }}
-      </div>
-    </div>
-
-    <div>
-      <div style="font-size:12px; color:#888;">
-        12 cuotas
-      </div>
-      <div style="font-size:14px; font-weight:600; color:#555;">
-        {{ totales.cuotas_12 | money }}
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-  <!-- Observaciones -->
-  {% if payload.observaciones %}
-  <div class="obs">
-    <strong>Observaciones:</strong><br>
-    {{ payload.observaciones }}
-  </div>
-  {% endif %}
+  <!-- Footer visible -->
+  <footer class="footer">
+    <span>The Gamer Shop - Tu tienda Gamer de Confianza</span>
+    <span>Carhue 1409 - Mataderos/Barrio Naon CABA CP1440 - 11 2512 1409</span>
+  </footer>
 
 </body>
 </html>
-
