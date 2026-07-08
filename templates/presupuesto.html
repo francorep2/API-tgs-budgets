@@ -168,6 +168,10 @@
       font-weight: 800;
     }
 
+    .included-line {
+      margin-top: 2px;
+    }
+
     /* Tabla de productos */
     table.items {
       width: 100%;
@@ -309,17 +313,6 @@
       border: 1px solid #dedede;
     }
 
-    .installments th {
-      background: #f4f4f4;
-      color: #111;
-      font-size: 10.2px;
-      text-transform: uppercase;
-      letter-spacing: .3px;
-      text-align: left;
-      padding: 5px 8px;
-      border-bottom: 1px solid #dedede;
-    }
-
     .installments td {
       padding: 5px 8px;
       border-bottom: 1px solid #eeeeee;
@@ -353,16 +346,17 @@
       color: #0d47a1;
     }
 
-    .bbva-note-row td {
+    .bbva-note {
+      margin-top: 6px;
+      padding: 6px 8px;
       background: #fafafa;
-      color: #444;
+      border-left: 3px solid #0d47a1;
       font-size: 10px;
-      line-height: 1.3;
-      padding: 5px 8px;
-      border-bottom: 1px solid #eeeeee;
+      color: #444;
+      line-height: 1.32;
     }
 
-    .bbva-note-row strong {
+    .bbva-note strong {
       color: #0d47a1;
       font-weight: 800;
     }
@@ -471,9 +465,15 @@
 
   <!-- Incluye -->
   <div class="included">
-    <strong>Incluye:</strong>
-    Windows 11/10 Pro <span class="warning">sin licencia</span> ·
-    Drivers de video dedicados para la GPU.
+    <div class="included-line">
+      <strong>Incluye:</strong> Servicio de Armado, Instalación y Configuración de PC.
+    </div>
+    <div class="included-line">
+      Windows 11/10 Pro <span class="warning">sin licencia</span> · Drivers de video dedicados para la GPU.
+    </div>
+    <div class="included-line">
+      <strong>Demora estimada:</strong> 3 a 5 días hábiles una vez dada el alta.
+    </div>
   </div>
 
   <!-- Detalle -->
@@ -509,7 +509,13 @@
 
             {% if it.observacion %}
               <div class="item-obs">
-                {{ it.observacion | replace('\n','<br>') | safe }}
+                {{
+                  it.observacion
+                    | replace('Incluye la instalación del Sistema Operativo Windows 11/10 Pro/Home', '')
+                    | replace('Servicio de Armado y Configuración de PC,', 'Servicio de Armado, Instalación y Configuración de PC')
+                    | replace('\n','<br>')
+                    | safe
+                }}
               </div>
             {% endif %}
           </td>
@@ -540,14 +546,6 @@
     </div>
 
     <table class="installments">
-      <thead>
-        <tr>
-          <th>Banco / Medio</th>
-          <th>Plan</th>
-          <th style="text-align:right;">Importe</th>
-        </tr>
-      </thead>
-
       <tbody>
         <tr>
           <td class="bank bbva">BBVA - Banco Francés</td>
@@ -559,14 +557,6 @@
           <td class="bank bbva">BBVA - Banco Francés</td>
           <td class="plan bbva">6 cuotas sin interés</td>
           <td class="amount bbva">{{ totales.bbva_6 | money }}</td>
-        </tr>
-
-        <tr class="bbva-note-row">
-          <td colspan="3">
-            <strong>BBVA:</strong>
-            3 cuotas sin interés todos los viernes y sábados.
-            6 cuotas sin interés solo 1 día al mes, generalmente a mediados.
-          </td>
         </tr>
 
         <tr>
@@ -588,6 +578,12 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="bbva-note">
+      <strong>BBVA:</strong>
+      3 cuotas sin interés todos los viernes y sábados.
+      6 cuotas sin interés solo 1 día al mes, generalmente a mediados.
+    </div>
   </div>
 
   <!-- Política de aceptación -->
